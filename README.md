@@ -40,6 +40,33 @@ cargo run --example create_agent_spending_account
 
 ---
 
+## CLI
+
+```sh
+# Install the cerberus CLI
+cargo install --git https://github.com/joaopco8/cerberus-skill
+
+# Create a governed spending account (TX1–TX4)
+cerberus init \
+  --agent-wallet <AGENT_PUBKEY> \
+  --max-auto-approve 10000000
+
+# Check lock status of any multisig (read-only, no wallet needed)
+cerberus status <MULTISIG_PDA>
+
+# Complete an interrupted setup
+cerberus recover <MULTISIG_PDA>
+```
+
+Global flags available on every subcommand:
+
+```
+--rpc-url <URL>    RPC endpoint (default: https://api.devnet.solana.com)
+--keypair <PATH>   Keypair file (default: ~/.config/solana/id.json)
+```
+
+---
+
 ## What It Does
 
 ```text

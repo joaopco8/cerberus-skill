@@ -79,6 +79,7 @@
 //! ```
 
 pub mod banner;
+pub mod cli;
 pub mod error;
 pub mod lock;
 pub mod recover;
