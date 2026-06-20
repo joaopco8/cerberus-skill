@@ -66,29 +66,33 @@ of the on-chain Tier 1 guarantee. See `references/tiered-auto-approval.md`.
 ## Usage
 
 ```rust
-use cerberus_skill::spending_account::{create_agent_spending_account, SpendingAccountConfig};
-use solana_client::rpc_client::RpcClient;
+use cerberus_skill::{
+    create_governed_spending_account,
+    spending_account::{SpendingTierConfig, SpendingPeriod},
+};
+use solana_client::nonblocking::rpc_client::RpcClient;
 use solana_sdk::{pubkey::Pubkey, signature::Keypair, signer::Signer};
 
-let client = RpcClient::new("https://api.devnet.solana.com".to_string());
+// async context required — see examples/create_agent_spending_account.rs
+let rpc = RpcClient::new("https://api.devnet.solana.com".to_string());
 let payer = Keypair::new(); // your funded wallet
 
-let info = create_agent_spending_account(
-    &client,
+let account = create_governed_spending_account(
+    &rpc,
     &payer,
-    SpendingAccountConfig {
-        agent_wallet: agent_keypair.pubkey(),
-        approvers: vec![human_wallet.pubkey()],
-        threshold: 1,
-        limit_lamports: 10_000_000,  // 0.01 SOL per day
-        period_seconds: 86_400,
-        mint: Pubkey::default(),     // native SOL
-        vault_index: 0,
+    agent_keypair.pubkey(),      // constrained wallet
+    human_wallet.pubkey(),       // governing authority (human key)
+    SpendingTierConfig {
+        max_auto_approve_lamports: 10_000_000, // 0.01 SOL per day
+        period: SpendingPeriod::Day,
+        mint: Pubkey::default(),               // native SOL
     },
-)?;
+)
+.await?;
 
-// Store info.create_key — needed for recovery if setup is interrupted.
-println!("multisig: {}", info.multisig_pda);
+// Store account.multisig_pda before funding the vault.
+println!("multisig: {}", account.multisig_pda);
+println!("vault:    {}", account.vault_pda);
 ```
 
 For AI agent usage, see [SKILL.md](SKILL.md).
@@ -120,12 +124,10 @@ Rent is recoverable if the account is ever closed.
 
 | Module | Key Function |
 |--------|-------------|
-| `spending_account` | `create_agent_spending_account` — full two-step setup |
-| `lock` | `finalize_lock` — verify on-chain state after setup |
-| `lock` | `remaining_budget` — pre-check budget before a transaction |
-| `verify` | `verify_spending_limit` — full verification report |
-| `recover` | `detect_partial_setup` — probe for interrupted setup |
-| `recover` | `resume_setup` — continue from where setup failed |
+| `spending_account` | `create_governed_spending_account` — TX1–TX4 setup |
+| `lock` | `get_lock_state` — read `config_authority` + `threshold` from chain |
+| `verify` | `assert_fully_locked` — assert multisig is locked after setup |
+| `recover` | `recover_partial_setup` — complete an interrupted TX1–TX4 |
 
 Full docs: `cargo doc --open`
 

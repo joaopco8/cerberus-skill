@@ -55,7 +55,7 @@ use cerberus_skill::{
     spending_account::{SpendingTierConfig, SpendingPeriod},
 };
 use solana_client::nonblocking::rpc_client::RpcClient;
-use solana_sdk::{pubkey::Pubkey, signature::Keypair};
+use solana_sdk::{pubkey::Pubkey, signature::Keypair, signer::Signer};
 
 let rpc = RpcClient::new("https://api.devnet.solana.com".to_string());
 
