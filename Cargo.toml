@@ -1,0 +1,21 @@
+[package]
+name = "cerberus-skill"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "On-chain governed spending limits for AI agent wallets on Solana, built on Squads Protocol v4"
+repository = "https://github.com/joaopco8/cerberus-skill"
+keywords = ["solana", "ai-agents", "squads", "spending-limits", "x402"]
+categories = ["cryptography::cryptocurrencies"]
+
+[dependencies]
+solana-client = "1.18"
+solana-sdk = "1.18"
+squads-multisig = "2"
+thiserror = "2"
+tokio = { version = "1", features = ["full"] }
+anyhow = "1"
+shellexpand = "3"
+
+[dev-dependencies]
+solana-program-test = "1.18"
