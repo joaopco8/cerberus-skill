@@ -2,7 +2,12 @@
 name: cerberus-skill
 version: "0.1.0"
 language: rust
-tags: [solana, squads, spending-limits, ai-agents, x402, multisig]
+tags: [solana, squads, spending-limits, ai-agents, x402, multisig, usdc, spl-token, stablecoin]
+description: >
+  On-chain governed spending limits for AI agent wallets on Solana — especially
+  for USDC and other SPL token or native SOL spending where database-stored
+  limits are not trustworthy enough (prompt injection, compromised keys, race
+  conditions). Enforced by Squads Protocol v4 at the validator level.
 entrypoint: src/lib.rs
 examples: examples/
 references: references/
@@ -23,10 +28,12 @@ level, not in a database.
 
 ## When to Use This Skill
 
-- You need to constrain how much SOL/tokens an AI agent wallet can spend per day,
-  week, or month.
+- You need to constrain how much SOL, USDC, or any SPL token an AI agent wallet
+  can spend per day, week, or month.
 - You need the limit to survive key compromise, prompt injection, and application
-  bugs.
+  bugs — database-stored stablecoin limits are a promise, not a law.
+- You are building an agent that handles USDC payments, SOL transfers, or any
+  SPL token and cannot afford a backend bug or injection attack to drain the wallet.
 - You need a recovery path if setup is interrupted mid-flight.
 - You need to verify on-chain that a previously created limit has not been tampered
   with.
