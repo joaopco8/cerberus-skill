@@ -78,6 +78,7 @@
 //! # }
 //! ```
 
+pub mod banner;
 pub mod error;
 pub mod lock;
 pub mod recover;

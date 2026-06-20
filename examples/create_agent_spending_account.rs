@@ -101,6 +101,7 @@ fn parse_args() -> Result<Args> {
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    cerberus_skill::banner::print_banner();
     let args = parse_args()?;
     let payer: Keypair = read_keypair_file(&args.keypair_path)
         .map_err(|e| anyhow!("keypair read failed ({p}): {e}", p = args.keypair_path))?;

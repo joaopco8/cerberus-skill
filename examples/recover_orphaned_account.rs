@@ -37,6 +37,7 @@ enum RecoveryStatus {
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    cerberus_skill::banner::print_banner();
     let rpc_url =
         std::env::var("RPC_URL").unwrap_or_else(|_| "https://api.devnet.solana.com".to_string());
     let rpc = RpcClient::new(rpc_url);

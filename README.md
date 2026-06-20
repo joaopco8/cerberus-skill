@@ -1,3 +1,13 @@
+<p align="center">
+  <img src="assets/cerberus-banner.svg" alt="Cerberus" width="600"/>
+</p>
+
+<p align="center">
+  <em>On-chain governed spending limits for AI agents on Solana</em>
+</p>
+
+<br/>
+
 # cerberus-skill
 
 On-chain governed spending limits for AI agent wallets on Solana, built on

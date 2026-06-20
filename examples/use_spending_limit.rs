@@ -66,6 +66,7 @@ fn classify(amount: u64, remaining: u64, limit: u64) -> ApprovalTier {
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    cerberus_skill::banner::print_banner();
     let rpc_url =
         std::env::var("RPC_URL").unwrap_or_else(|_| "https://api.devnet.solana.com".to_string());
     let rpc = RpcClient::new(rpc_url);

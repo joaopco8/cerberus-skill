@@ -1,0 +1,20 @@
+<svg width="800" height="160" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="cerberusGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6B21A8"/>
+      <stop offset="50%" stop-color="#9333EA"/>
+      <stop offset="100%" stop-color="#06B6D4"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="160" fill="#0a0a0f"/>
+  <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle"
+        font-family="monospace" font-weight="bold" font-size="64"
+        fill="url(#cerberusGradient)" letter-spacing="8">
+    CERBERUS
+  </text>
+  <text x="50%" y="82%" dominant-baseline="middle" text-anchor="middle"
+        font-family="monospace" font-size="16" fill="#6b7280"
+        letter-spacing="2">
+    ON-CHAIN GOVERNED SPENDING LIMITS FOR AI AGENTS
+  </text>
+</svg>
