@@ -144,7 +144,7 @@ No application code runs. No database is consulted. The rule is in the chain.
 | 3 | > 5× limit | Human multisig vote via Squads governance |
 
 Tiers 2 and 3 are patterns you implement in your application layer, on top
-of the on-chain Tier 1 guarantee. See `references/tiered-auto-approval.md`.
+of the on-chain Tier 1 guarantee. See [`skill/tiered-auto-approval.md`](skill/tiered-auto-approval.md).
 
 ---
 
@@ -218,14 +218,31 @@ Full docs: `cargo doc --open`
 
 ---
 
+## Install as a Solana AI Kit Skill
+
+```sh
+# Into the standard kit location
+./install.sh
+
+# Custom path
+./install.sh --target /path/to/your-project/.claude/skills/cerberus
+
+# Skip prompts
+./install.sh -y
+```
+
+Installs `skill/` → `~/.claude/skills/cerberus/` and `/cerberus-audit` command.
+
+---
+
 ## Reference Documents
 
-- [`references/why-database-limits-fail.md`](references/why-database-limits-fail.md) — attack vectors this solves
-- [`references/squads-bootstrap-pattern.md`](references/squads-bootstrap-pattern.md) — raw instruction layout
-- [`references/tiered-auto-approval.md`](references/tiered-auto-approval.md) — 3-tier governance pattern
-- [`references/partial-failure-recovery.md`](references/partial-failure-recovery.md) — recovery decision tree
-- [`references/verification-checklist.md`](references/verification-checklist.md) — on-chain verification checks
-- [`references/common-errors.md`](references/common-errors.md) — error codes and fixes
+- [`skill/why-database-limits-fail.md`](skill/why-database-limits-fail.md) — attack vectors this solves
+- [`skill/squads-bootstrap-pattern.md`](skill/squads-bootstrap-pattern.md) — raw instruction layout
+- [`skill/tiered-auto-approval.md`](skill/tiered-auto-approval.md) — 3-tier governance pattern
+- [`skill/partial-failure-recovery.md`](skill/partial-failure-recovery.md) — recovery decision tree
+- [`skill/verification-checklist.md`](skill/verification-checklist.md) — on-chain verification checks
+- [`skill/common-errors.md`](skill/common-errors.md) — error codes and fixes
 
 ---
 

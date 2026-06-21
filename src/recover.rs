@@ -4,7 +4,7 @@
 //! on-chain but is not yet locked. [`recover_partial_setup`] detects the
 //! current state and completes the missing steps so the lock is applied.
 //!
-//! See `references/partial-failure-recovery.md` for the full decision tree.
+//! See `skill/partial-failure-recovery.md` for the full decision tree.
 
 use solana_client::nonblocking::rpc_client::RpcClient;
 use solana_sdk::{pubkey::Pubkey, signature::Keypair};

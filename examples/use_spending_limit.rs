@@ -168,12 +168,12 @@ async fn main() -> Result<()> {
         ApprovalTier::Tier2ExtraVerification { shortfall } => {
             println!("[Tier 2] shortfall {shortfall} lamports — extra verification required");
             println!("  implement: TOTP check, webhook approval, rate-limit enforcement");
-            println!("  see: references/tiered-auto-approval.md");
+            println!("  see: skill/tiered-auto-approval.md");
         }
         ApprovalTier::Tier3HumanApproval { excess_multiplier } => {
             println!("[Tier 3] {excess_multiplier}× over limit — human multisig vote required");
             println!("  implement: create Squads proposal, wait for governing_authority signature");
-            println!("  see: references/tiered-auto-approval.md");
+            println!("  see: skill/tiered-auto-approval.md");
         }
     }
 
