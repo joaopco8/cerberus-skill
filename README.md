@@ -10,8 +10,20 @@
 
 # cerberus-skill
 
+> Submitted for the Superteam Brasil bounty ["Ship useful agent skills we can add to Solana AI Kit"](https://superteam.fun/earn/listing/skills/)
+
 On-chain governed spending limits for AI agent wallets on Solana, built on
 [Squads Protocol v4](https://squads.so).
+
+```
+ ██████╗███████╗██████╗ ██████╗ ███████╗██████╗ ██╗   ██╗███████╗
+██╔════╝██╔════╝██╔══██╗██╔══██╗██╔════╝██╔══██╗██║   ██║██╔════╝
+██║     █████╗  ██████╔╝██████╔╝█████╗  ██████╔╝██║   ██║███████╗
+██║     ██╔══╝  ██╔══██╗██╔══██╗██╔══╝  ██╔══██╗██║   ██║╚════██║
+╚██████╗███████╗██║  ██║██████╔╝███████╗██║  ██║╚██████╔╝███████║
+ ╚═════╝╚══════╝╚═╝  ╚═╝╚═════╝ ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝
+        on-chain governed spending limits for AI agents
+```
 
 ---
 
@@ -21,16 +33,62 @@ cryptographically-enforced, on-chain rules stored in a Squads v4
 `SpendingLimit` PDA. Once set, no agent action, no code bug, and no stolen
 API key can bypass them — only a multisig governance vote can change them.
 
-Cost: **~0.011 SOL per setup** (~$0.0015 at current prices). One-time cost
+Cost: **~0.0105 SOL per setup** (~$0.0015 at current prices). One-time cost
 for the lifetime of the wallet.
+
+---
+
+## Live Security Demo
+
+Real devnet run against [`EU4sHFG4VwCY6CrmHF6A7VEvLU1HUWxPMJT3TjWkeZ81`](https://explorer.solana.com/address/EU4sHFG4VwCY6CrmHF6A7VEvLU1HUWxPMJT3TjWkeZ81?cluster=devnet).
+Attacker has the agent private key only. All 3 attack vectors blocked:
+
+```
+  ⚔  CERBERUS ATTACK SIMULATION
+  Target:   EU4sHFG4VwCY6CrmHF6A7VEvLU1HUWxPMJT3TjWkeZ81
+  Attacker: CZCSFypSrzL21ZZkb2RUxTMH9miH6JAPY2iz3K5UfSix (compromised agent key only)
+
+  [1/3] overspend
+         spending_limit_use(10000000 lamports) — 10× the configured limit of 1000000
+         — signed only by agent key, no governing authority
+         Submitting transaction … ✗ REJECTED  (expected)
+         On-chain error: custom program error: 0x178a (SpendingLimitExceeded)
+
+  [2/3] config-escalation
+         multisig_change_threshold signed by agent pretending to be config_authority
+         — config_authority is Pubkey::default() (disabled), no valid signer exists
+         Submitting transaction … ✗ REJECTED  (expected)
+         On-chain error: custom program error: 0x1774 (Unauthorized)
+
+  [3/3] vault-drain
+         system Transfer(from: vault CfM7H4nmNyAA7nQz7RZZ9f3Z1VQVNgn3rXqw2z4gLpCh,
+         to: agent, amount: 1000000) — vault PDA has no private key; tx signs with
+         agent alone, system program rejects on-chain because from.is_signer is false
+         Submitting transaction … ✗ REJECTED  (expected)
+         On-chain error: missing required signature for instruction
+
+  ═══════════════════════════════════════════════════
+  RESULT: 3/3 attack vectors blocked
+  This account is provably ungovernable by any single
+  compromised key. Verify on-chain:
+
+  https://explorer.solana.com/address/EU4sHFG4VwCY6CrmHF6A7VEvLU1HUWxPMJT3TjWkeZ81?cluster=devnet
+```
+
+Reproduce it yourself:
+
+```sh
+cargo run --bin demo_setup -- --fund-from <your-funded-keypair.json>
+# follow the printed simulate-attack command
+```
 
 ---
 
 ## Quick Start
 
 ```sh
-# Add to your project
-cargo add cerberus-skill
+# Add to your project (not yet on crates.io — use git reference)
+cargo add cerberus-skill --git https://github.com/joaopco8/cerberus-skill
 
 # Or clone for examples
 git clone https://github.com/joaopco8/cerberus-skill
