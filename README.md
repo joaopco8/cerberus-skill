@@ -1,13 +1,3 @@
-<p align="center">
-  <img src="assets/cerberus-banner.svg" alt="Cerberus" width="600"/>
-</p>
-
-<p align="center">
-  <em>On-chain governed spending limits for AI agents on Solana</em>
-</p>
-
-<br/>
-
 # cerberus-skill
 
 > Submitted for the Superteam Brasil bounty ["Ship useful agent skills we can add to Solana AI Kit"](https://superteam.fun/earn/listing/skills/)
