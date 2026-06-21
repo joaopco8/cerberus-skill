@@ -53,4 +53,25 @@ pub enum Commands {
         #[arg(long, default_value = "1")]
         expected_threshold: u16,
     },
+
+    /// Attempt 3 real attack vectors against a governed account and prove each is
+    /// rejected on-chain by the Squads program, not by application logic.
+    ///
+    /// Every attack submits a real transaction to devnet. Results are reported
+    /// honestly — if an attack succeeds, it is flagged as a security finding.
+    SimulateAttack {
+        /// The multisig PDA to attack
+        multisig_pda: String,
+
+        /// Path to the AGENT wallet's keypair — the compromised key being simulated.
+        /// This is NOT the governing authority; it is the key an attacker is assumed
+        /// to have obtained (e.g., stolen from the agent's runtime environment).
+        #[arg(long)]
+        agent_keypair: String,
+
+        /// The SpendingLimit PDA for this multisig. Required for Attack 1 (overspend).
+        /// Omit to run only Attacks 2 and 3.
+        #[arg(long)]
+        spending_limit_pda: Option<String>,
+    },
 }

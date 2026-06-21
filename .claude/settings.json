@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(cd \"C:\\\\Users\\\\Pichau\\\\Desktop\\\\cerberus-skill\"; $p = [System.Diagnostics.Process]::Start\\([System.Diagnostics.ProcessStartInfo]@{FileName=\"$PWD\\\\target\\\\debug\\\\demo_setup.exe\";Arguments=\"--help\";UseShellExecute=$false;RedirectStandardOutput=$true;RedirectStandardError=$true;CreateNoWindow=$true}\\); $stdout=$p.StandardOutput.ReadToEnd\\(\\); $stderr=$p.StandardError.ReadToEnd\\(\\); $p.WaitForExit\\(\\); \"Exit: $\\($p.ExitCode\\)\"; \"STDOUT len: $\\($stdout.Length\\)\"; \"STDERR len: $\\($stderr.Length\\)\"; if\\($stdout\\) {\"STDOUT: $stdout\"}; if\\($stderr\\) {\"STDERR: $stderr\"})",
+      "PowerShell($demo = [System.IO.File]::ReadAllBytes\\(\"C:\\\\Users\\\\Pichau\\\\Desktop\\\\cerberus-skill\\\\target\\\\debug\\\\demo_setup.exe\"\\); $cerb = [System.IO.File]::ReadAllBytes\\(\"C:\\\\Users\\\\Pichau\\\\Desktop\\\\cerberus-skill\\\\target\\\\debug\\\\cerberus.exe\"\\); \"demo_setup.exe size: $\\($demo.Length\\)\"; \"cerberus.exe size: $\\($cerb.Length\\)\"; $demoStr = [System.Text.Encoding]::ASCII.GetString\\($demo\\); $manifestIdx = $demoStr.IndexOf\\(\"requestedExecutionLevel\"\\); \"demo manifest match at: $manifestIdx\"; $manifestIdx2 = $demoStr.IndexOf\\(\"requireAdministrator\"\\); \"demo requireAdmin at: $manifestIdx2\")",
+      "PowerShell($body = '{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getBalance\",\"params\":[\"EC5sr94vuGzMQofBB7sS8E3EmnmzzqBiP5KSGdT1Caej\"]}'; \\(Invoke-RestMethod -Uri \"https://api.devnet.solana.com\" -Method Post -Body $body -ContentType \"application/json\"\\).result.value)",
+      "PowerShell($body = '{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getBalance\",\"params\":[\"CZCSFypSrzL21ZZkb2RUxTMH9miH6JAPY2iz3K5UfSix\"]}'; \\(Invoke-RestMethod -Uri \"https://api.devnet.solana.com\" -Method Post -Body $body -ContentType \"application/json\"\\).result.value)"
+    ]
+  }
+}

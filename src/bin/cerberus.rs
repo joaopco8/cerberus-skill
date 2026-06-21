@@ -7,7 +7,7 @@
 //! ```
 
 use cerberus_skill::{
-    banner,
+    attack_sim, banner,
     cli::{Cli, Commands},
     error::CerberusError,
     lock::get_lock_state,
@@ -54,6 +54,19 @@ async fn main() {
                 &cli.keypair,
                 &multisig_pda,
                 expected_threshold,
+            )
+            .await
+        }
+        Commands::SimulateAttack {
+            multisig_pda,
+            agent_keypair,
+            spending_limit_pda,
+        } => {
+            run_simulate_attack(
+                &cli.rpc_url,
+                &multisig_pda,
+                &agent_keypair,
+                spending_limit_pda.as_deref(),
             )
             .await
         }
@@ -259,5 +272,104 @@ async fn run_recover(
         "  {} recovery complete — multisig is now fully locked.",
         "✓".green().bold()
     );
+    Ok(())
+}
+
+// ── run_simulate_attack ────────────────────────────────────────────────────────
+
+async fn run_simulate_attack(
+    rpc_url: &str,
+    multisig_pda_str: &str,
+    agent_keypair_path: &str,
+    spending_limit_pda_str: Option<&str>,
+) -> anyhow::Result<()> {
+    let rpc = RpcClient::new(rpc_url.to_string());
+    let multisig_pda = parse_pubkey(multisig_pda_str, "multisig-pda")?;
+    let agent = load_keypair(agent_keypair_path)?;
+
+    let spending_limit_pda = spending_limit_pda_str
+        .map(|s| parse_pubkey(s, "spending-limit-pda"))
+        .transpose()?;
+
+    println!("  ⚔  CERBERUS ATTACK SIMULATION");
+    println!("  Target:   {}", multisig_pda_str.bold());
+    println!(
+        "  Attacker: {} (compromised agent key only)",
+        agent.pubkey().to_string().bold()
+    );
+    if spending_limit_pda.is_none() {
+        println!(
+            "  {}",
+            "Note: --spending-limit-pda not provided, Attack 1 (overspend) skipped."
+                .yellow()
+                .dimmed()
+        );
+    }
+    println!();
+
+    let total_expected = if spending_limit_pda.is_some() { 3 } else { 2 };
+    let results =
+        attack_sim::run_full_simulation(&rpc, &multisig_pda, spending_limit_pda.as_ref(), &agent)
+            .await;
+
+    let mut blocked_count = 0usize;
+    for (i, result) in results.iter().enumerate() {
+        println!(
+            "  [{}/{}] {}",
+            i + 1,
+            total_expected,
+            result.vector_name.bold()
+        );
+        println!("         {}", result.description.dimmed());
+        print!("         Submitting transaction … ");
+
+        if result.blocked {
+            blocked_count += 1;
+            println!("{} REJECTED  {}", "✗".red().bold(), "(expected)".green());
+            if let Some(err) = &result.on_chain_error {
+                let trimmed = err.lines().next().unwrap_or(err).trim();
+                let display = match attack_sim::decode_squads_error(trimmed) {
+                    Some(name) => format!("{trimmed} ({name})"),
+                    None => trimmed.to_string(),
+                };
+                println!("         On-chain error: {}", display.dimmed());
+            }
+        } else {
+            println!("{} PASSED — SECURITY GAP FOUND", "⚠".yellow().bold());
+            if let Some(err) = &result.on_chain_error {
+                println!("         Detail: {}", err.dimmed());
+            }
+        }
+        println!();
+    }
+
+    let sep = "═".repeat(51);
+    println!("  {sep}");
+    if blocked_count == total_expected {
+        println!(
+            "  RESULT: {}/{} attack vectors blocked",
+            blocked_count, total_expected
+        );
+        println!(
+            "  {}",
+            "This account is provably ungovernable by any single".green()
+        );
+        println!("  {}", "compromised key. Verify on-chain:".green());
+        println!();
+        println!(
+            "  https://explorer.solana.com/address/{}?cluster=devnet",
+            multisig_pda_str
+        );
+    } else {
+        println!(
+            "  {} {}/{} blocked — {} vector(s) succeeded — review needed",
+            "⚠".yellow().bold(),
+            blocked_count,
+            total_expected,
+            total_expected - blocked_count
+        );
+    }
+    println!("  {sep}");
+
     Ok(())
 }

@@ -78,6 +78,7 @@
 //! # }
 //! ```
 
+pub mod attack_sim;
 pub mod banner;
 pub mod cli;
 pub mod error;

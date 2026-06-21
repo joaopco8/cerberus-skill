@@ -1,1 +1,5 @@
 /target
+demo-payer.json
+metera-devnet.json
+demo-setup.log
+*.txt
