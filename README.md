@@ -74,6 +74,8 @@ cargo run --bin demo_setup -- --fund-from <your-funded-keypair.json>
 
 ---
 
+Two ways to use Cerberus: as a Rust crate in your own code, or as a Solana AI Kit skill that gives Claude Code the context to write this integration for you (see [Install as a Solana AI Kit Skill](#install-as-a-solana-ai-kit-skill)).
+
 ## Quick Start
 
 ```sh
@@ -180,7 +182,7 @@ println!("multisig: {}", account.multisig_pda);
 println!("vault:    {}", account.vault_pda);
 ```
 
-For AI agent usage, see [SKILL.md](SKILL.md).
+For AI agent usage, see [skill/SKILL.md](skill/SKILL.md).
 
 ---
 
@@ -231,7 +233,19 @@ Full docs: `cargo doc --open`
 ./install.sh -y
 ```
 
-Installs `skill/` → `~/.claude/skills/cerberus/` and `/cerberus-audit` command.
+Installs `skill/` → `~/.claude/skills/cerberus/` and the `/cerberus-audit` command.
+
+### /cerberus-audit
+
+Once installed, run this inside any Claude Code session:
+
+```
+/cerberus-audit <MULTISIG_PDA>
+```
+
+Checks whether a given multisig is fully locked (`config_authority` disabled,
+correct threshold) and reports the security posture — without writing any code.
+Useful for auditing an existing integration or verifying a setup completed correctly.
 
 ---
 
